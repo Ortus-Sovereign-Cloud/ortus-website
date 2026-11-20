@@ -1,6 +1,6 @@
 # ortus-website
 
-Ortus install guide and API reference.
+Ortus install guide and API reference: `docs/` (the guide) and `api/` (the reference of the pinned program, `pins.toml`) become a static site with `python3 tools/build.py`; `ci/check.sh` checks it, and CI publishes it on GitHub Pages.
 
 Part of Ortus, a sovereign workspace for organisations and governments: mail, calendar, files, documents, chat, calls, tasks and approvals that an organisation runs itself.
 

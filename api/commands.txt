@@ -1,0 +1,9 @@
+backup
+check-backup
+export-point
+reference
+restore
+rotate-keys
+serve
+setup-link
+version
