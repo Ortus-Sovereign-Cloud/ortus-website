@@ -4,14 +4,25 @@ Ortus keeps two kinds of copies, and both restore into either shape: a backup of
 
 ## Nightly backups
 
-`ortus-backup.timer` (one machine) or the backup CronJob (Kubernetes) writes a whole backup every night and keeps seven. Copy them off the machine. By hand:
+`ortus-backup.timer` (one machine; keeps seven, in `/var/lib/ortus/backups`) or the backup CronJob (Kubernetes; keeps three) writes a whole backup every night. Copy them off the machine. By hand:
 
 ```sh
-sudo -u ortus ORTUS_CONFIG=/etc/ortus/ortus.toml ortus backup /srv/backups/before-upgrade
-ortus check-backup /srv/backups/before-upgrade
+sudo ortusctl backup /var/lib/ortus/backups/before-upgrade
+sudo ortusctl check-backup /var/lib/ortus/backups/before-upgrade
 ```
 
-To restore: stop Ortus, give it an empty data directory (or an empty database and bucket), then `ortus restore <backup>` and start Ortus. Put the secrets key back first.
+A restore goes into an empty database and file store only. On one machine with SQLite:
+
+```sh
+sudo systemctl stop ortus
+sudo mv /var/lib/ortus /var/lib/ortus.old
+sudo install -d -o ortus -g ortus -m 0750 /var/lib/ortus
+sudo cp -p /var/lib/ortus.old/secrets.key /var/lib/ortus/
+sudo ortusctl restore /var/lib/ortus.old/backups/before-upgrade
+sudo systemctl start ortus
+```
+
+With PostgreSQL or S3, point the settings at an empty database and bucket instead. The secrets key must be the old installation's.
 
 ## Restore points
 
@@ -22,7 +33,7 @@ Ortus also takes a restore point every hour and keeps one an hour for 48 hours, 
 A whole point becomes an ordinary backup with:
 
 ```sh
-ortus export-point 20261120-180000 /srv/backups/point
+sudo ortusctl export-point 20261120-180000 /var/lib/ortus/backups/point
 ```
 
 ## The restore test

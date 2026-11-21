@@ -10,7 +10,7 @@ An owner adds a webhook with an address and the events it hears of: `record.file
 {"event": "record.filed", "id": 1234, "at": 1795197600000, "target": "case-17", "detail": {"record": "r1"}}
 ```
 
-with the headers `X-Ortus-Event`, `X-Ortus-Delivery`, `X-Ortus-Timestamp` and `X-Ortus-Signature: sha256=<hex>`, the HMAC-SHA256 of `<timestamp>.<body>` with the webhook's secret (shown once, when it is made). Check the signature and that the timestamp is recent. A post that is not taken (an answer other than 2xx) is tried again 8 times, 2, 4, 8 … minutes apart. **Test** sends a `ping`.
+with the headers `X-Ortus-Event`, `X-Ortus-Delivery`, `X-Ortus-Timestamp` and `X-Ortus-Signature: sha256=<hex>`, the HMAC-SHA256 of `<timestamp>.<body>` with the webhook's secret (shown once, when it is made). Check the signature and that the timestamp is recent. A post that is not taken (an answer other than 2xx) is tried again, 2, 4, 8 … minutes apart, up to 8 tries in all. **Test** sends a `ping`.
 
 The same as an API call:
 

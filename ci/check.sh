@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 rev="$(sed -n 's/^ortus = "\([0-9a-f]\{40\}\)"$/\1/p' pins.toml)"
 [ -n "$rev" ] || { echo "check: pins.toml names no ortus commit" >&2; exit 1; }
 base="https://raw.githubusercontent.com/Ortus-Sovereign-Cloud/ortus/$rev"
-for f in api/openapi.json api/commands.txt; do
+for f in api/openapi.json api/commands.txt api/settings.txt; do
   tmp="$(mktemp)"
   curl -fsSL "$base/$f" -o "$tmp"
   if [ -n "${ORTUS_UPDATE_REFERENCE:-}" ]; then cp "$tmp" "$f"; fi

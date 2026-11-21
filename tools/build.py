@@ -33,11 +33,19 @@ def page(title, body, depth=0):
 """
 
 
+def safe_href(url):
+    """Links stay on the web or inside the site: http(s), or a relative
+    path with no scheme (no javascript: and the like)."""
+    if re.match(r"^https?://", url) or not re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", url):
+        return url
+    raise SystemExit(f"build: refusing the link {url!r}")
+
+
 def inline(text):
-    text = html.escape(text, quote=False)
+    text = html.escape(text, quote=True)
     text = re.sub(r"`([^`]+)`", lambda m: f"<code>{m.group(1)}</code>", text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
-    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", lambda m: f'<a href="{safe_href(html.unescape(m.group(2))).replace(chr(34), "%22")}">{m.group(1)}</a>', text)
     return text
 
 
@@ -89,10 +97,14 @@ def reference():
     by_tag = {}
     for path, ops in sorted(spec["paths"].items()):
         for method, op in ops.items():
-            by_tag.setdefault((op.get("tags") or ["other"])[0], []).append((method.upper(), path, op))
+            tag = (op.get("tags") or ["other"])[0]
+            # A tag names a page file: plain words only.
+            if not re.fullmatch(r"[a-z0-9-]+", tag):
+                raise SystemExit(f"build: the tag {tag!r} is not a plain name")
+            by_tag.setdefault(tag, []).append((method.upper(), path, op))
     pages = {}
     index = ["<h1>API reference</h1>",
-             f"<p>{inline(spec.get('info', {}).get('description', ''))}</p>",
+             f"<p>{html.escape(spec.get('info', {}).get('description', ''))}</p>",
              "<p>Every call sends the session token as <code>Authorization: Bearer &lt;token&gt;</code> (browsers use the session cookie); "
              "every change also sends <code>X-Requested-With: ortus</code>. Errors are one JSON shape: "
              "<code>{\"error\": {\"code\", \"message\", \"request_id\"}}</code>.</p>",
@@ -102,7 +114,7 @@ def reference():
         body = [f"<h1>{html.escape(tag)}</h1>"]
         for method, path, op in by_tag[tag]:
             body.append(f'<div class="op" id="{html.escape(op.get("operationId", ""))}"><span class="m">{method}</span><code>{html.escape(path)}</code>'
-                        f'<p>{inline(op.get("summary", ""))}</p></div>')
+                        f'<p>{html.escape(op.get("summary", ""))}</p></div>')
         pages[tag] = "\n".join(body)
     index.append("</ul><p>The machine-readable reference: <a href=\"openapi.json\">openapi.json</a>.</p>")
     return "\n".join(index), pages
