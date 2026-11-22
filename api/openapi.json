@@ -809,6 +809,48 @@
         ]
       }
     },
+    "/api/v1/admin/photos": {
+      "put": {
+        "description": "For administrators and owners.",
+        "operationId": "setPhotoUploads",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Whether people may upload their own photo: {allowed}. Photos from the directory stay.",
+        "tags": [
+          "people"
+        ]
+      }
+    },
     "/api/v1/admin/policy": {
       "get": {
         "description": "For administrators and owners.",
@@ -1562,13 +1604,53 @@
             "session": []
           }
         ],
-        "summary": "Invite someone: {email, name, role, groups, language}. They get a link by mail.",
+        "summary": "Invite someone: {email, name, role, groups, language, send_to}. The answer has the link (and as a QR code), when it expires, and where the letter went (send_to, a personal address; none when the address is a mailbox here).",
         "tags": [
           "people"
         ]
       }
     },
     "/api/v1/admin/users/:id": {
+      "delete": {
+        "description": "For administrators and owners.",
+        "operationId": "removePerson",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Remove a person and everything of theirs (owners only): {confirm, their address typed again}. Not yourself, the last owner, or someone under a retention hold.",
+        "tags": [
+          "people"
+        ]
+      },
       "patch": {
         "description": "For administrators and owners.",
         "operationId": "changePerson",
@@ -1652,6 +1734,130 @@
         ]
       }
     },
+    "/api/v1/admin/users/:id/invitation": {
+      "delete": {
+        "description": "For administrators and owners.",
+        "operationId": "withdrawInvitation",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Withdraw someone's invitation: its link stops working.",
+        "tags": [
+          "people"
+        ]
+      },
+      "post": {
+        "description": "For administrators and owners.",
+        "operationId": "renewInvitation",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A new link for someone invited (the old one stops working): {send (default true), send_to}.",
+        "tags": [
+          "people"
+        ]
+      }
+    },
+    "/api/v1/admin/users/:id/photo": {
+      "delete": {
+        "description": "For administrators and owners.",
+        "operationId": "removePersonPhoto",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Remove someone's photo.",
+        "tags": [
+          "people"
+        ]
+      }
+    },
     "/api/v1/admin/users/:id/reset": {
       "post": {
         "description": "For administrators and owners.",
@@ -1688,7 +1894,7 @@
             "session": []
           }
         ],
-        "summary": "Sign a person out everywhere, remove their sign-in methods and send a new invitation.",
+        "summary": "Sign a person out everywhere, remove their sign-in methods and make a new invitation: {send, send_to}, both optional.",
         "tags": [
           "people"
         ]
@@ -1730,7 +1936,7 @@
             "session": []
           }
         ],
-        "summary": "Invite many: CSV text, one per line: email,name[,role[,group;group]].",
+        "summary": "Invite many: CSV text, one per line: email,name[,role[,group;group[,personal email]]]. The answer lists each invitation's link.",
         "tags": [
           "people"
         ]
@@ -1928,6 +2134,10 @@
                           "path": {
                             "description": "Where the app lives in the web client.",
                             "type": "string"
+                          },
+                          "today": {
+                            "description": "Whether the app has a card on the start page (its /assets/apps/<id>/today.js).",
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -2623,6 +2833,48 @@
         "summary": "Pick one of the offered times: {time}. The event is made and everyone invited; only the first pick counts.",
         "tags": [
           "calendar"
+        ]
+      }
+    },
+    "/api/v1/calls/live": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "callsLive",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "The calls going on in rooms one is in: room, name, kind, startedAt and who is in each.",
+        "tags": [
+          "calls"
         ]
       }
     },
@@ -6244,6 +6496,130 @@
         ]
       }
     },
+    "/api/v1/mail/admin/addresses": {
+      "get": {
+        "description": "For administrators and owners.",
+        "operationId": "listMailAddresses",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Every address people have besides their own (address, person), and the mail domains they can be in.",
+        "tags": [
+          "mail"
+        ]
+      },
+      "post": {
+        "description": "For administrators and owners.",
+        "operationId": "addMailAddress",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Give a person another address: {address, user_id}. It must be in one of the mail domains and nobody else's; mail to it is theirs, and they may send from it.",
+        "tags": [
+          "mail"
+        ]
+      }
+    },
+    "/api/v1/mail/admin/addresses/:address": {
+      "delete": {
+        "description": "For administrators and owners.",
+        "operationId": "removeMailAddress",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Take an address away from its person.",
+        "tags": [
+          "mail"
+        ]
+      }
+    },
     "/api/v1/mail/admin/deliverability": {
       "get": {
         "description": "For administrators and owners.",
@@ -7841,6 +8217,210 @@
         ]
       }
     },
+    "/api/v1/me/phone-link": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "getPhoneLink",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Whether your latest phone link was used (used_at) and by what (agent).",
+        "tags": [
+          "sessions"
+        ]
+      },
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "makePhoneLink",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A one-time link (and QR code) that signs the Ortus app in as you: it works once, for five minutes; a newer one replaces it.",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
+    "/api/v1/me/photo": {
+      "delete": {
+        "description": "For anyone signed in.",
+        "operationId": "removeMyPhoto",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Remove your photo (your initials show instead).",
+        "tags": [
+          "people"
+        ]
+      },
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "getMyPhoto",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Whether you have a photo (its source: own or directory) and may upload one.",
+        "tags": [
+          "people"
+        ]
+      },
+      "put": {
+        "description": "For anyone signed in.",
+        "operationId": "setMyPhoto",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Your photo: the image itself as the body (PNG, JPEG or WebP, at most 512 KB).",
+        "tags": [
+          "people"
+        ]
+      }
+    },
     "/api/v1/me/place": {
       "put": {
         "description": "For anyone signed in.",
@@ -8517,6 +9097,50 @@
         ]
       }
     },
+    "/api/v1/people/:id/photo": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "getPhoto",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "The image (PNG, JPEG or WebP).",
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A colleague's photo, by account; 204 No Content when they have none.",
+        "tags": [
+          "people"
+        ]
+      }
+    },
     "/api/v1/people/contacts": {
       "get": {
         "description": "For anyone signed in.",
@@ -8760,6 +9384,50 @@
           }
         ],
         "summary": "The organisation's groups, with their member counts.",
+        "tags": [
+          "people"
+        ]
+      }
+    },
+    "/api/v1/people/photo": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "getPhotoByAddress",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "The image (PNG, JPEG or WebP).",
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A colleague's photo, by address (?email=); 204 No Content when there is none.",
         "tags": [
           "people"
         ]
@@ -9469,6 +10137,42 @@
         "summary": "Sign in with an address and password. When the account has an authenticator app, answers {next: \"code\", ticket} for the one-time code.",
         "tags": [
           "accounts"
+        ]
+      }
+    },
+    "/api/v1/session/phone-link": {
+      "post": {
+        "operationId": "followPhoneLink",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "summary": "The app follows a phone link: {token}. Signs in as its person; next, add a sign-in method.",
+        "tags": [
+          "sessions"
         ]
       }
     },
