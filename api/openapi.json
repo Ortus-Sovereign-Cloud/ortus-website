@@ -1059,6 +1059,88 @@
         ]
       }
     },
+    "/api/v1/admin/push": {
+      "get": {
+        "description": "For administrators and owners.",
+        "operationId": "pushSettings",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Whether notifications go to phones, through which gateway, and how many phones are registered.",
+        "tags": [
+          "notifications"
+        ]
+      },
+      "put": {
+        "description": "For administrators and owners.",
+        "operationId": "setPushSettings",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Turn notifications on phones on or off: {enabled, gateway (https; default the publisher's)}.",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
     "/api/v1/admin/retention": {
       "get": {
         "description": "For administrators and owners.",
@@ -8595,6 +8677,90 @@
         ]
       }
     },
+    "/api/v1/me/push-devices": {
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "registerPushDevice",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A phone registers for notifications: {platform (apns or unifiedpush), token (Apple device token or https endpoint), environment (apns: sandbox or production), utc_offset (minutes)}. Answers its id and a fetch token for its notifications.",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/me/push-devices/:id": {
+      "delete": {
+        "description": "For anyone signed in.",
+        "operationId": "unregisterPushDevice",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A phone stops getting notifications.",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
     "/api/v1/me/recovery-kit": {
       "post": {
         "description": "For anyone signed in.",
@@ -9472,6 +9638,78 @@
         "summary": "Ask what the policy would answer: {action (share, link, forward, open_on_phone), label, to (an address, a domain, anyone, or absent for people here), channel, reason}. Records nothing.",
         "tags": [
           "policy"
+        ]
+      }
+    },
+    "/api/v1/push/gateway": {
+      "post": {
+        "operationId": "pushGateway",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "summary": "On a push gateway (an installation with Apple's key): one push for an installation, {token, environment, notification, server}; nothing of the notification's content.",
+        "tags": [
+          "notifications"
+        ]
+      }
+    },
+    "/api/v1/push/notices/:id": {
+      "get": {
+        "operationId": "pushNotice",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "summary": "A phone reads one of its person's recent notifications, with its fetch token in X-Ortus-Push.",
+        "tags": [
+          "notifications"
         ]
       }
     },
