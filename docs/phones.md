@@ -8,7 +8,7 @@ The Ortus apps for iOS and Android cover mail, chat, calendar, files, documents,
 
 ## Notifications
 
-New Important mail, mentions, approvals and alerts can reach phones while the app is closed. They are off until an administrator turns them on in **Admin › Backup & restore › Integrations › Phone notifications**. A push carries only a reference to the notification: the phone fetches the text from the installation itself, with a token that can read that person's notifications and nothing else. Quiet hours and do-not-disturb hold pushes back; a phone stops getting them when its person signs out.
+New Important mail, mentions, approvals and alerts can reach phones while the app is closed. They are off until an administrator turns them on in **Admin › Integrations › Phone notifications**. A push carries only a reference to the notification: the phone fetches the text from the installation itself, with a token that can read that person's notifications and nothing else. Quiet hours and do-not-disturb hold pushes back; a phone stops getting them when its person signs out.
 
 **iPhone.** Apple delivers pushes to the Ortus Workspace app only for the holder of the publisher's key, so an installation hands each push to a push gateway, by default the publisher's (`https://ortus.cc/api/v1/push/gateway`). The gateway receives the phone's push address, the notification's reference and the installation's address; it keeps none of it and sees no content. An organisation that builds and signs the app itself sets its own key and is its own gateway:
 
