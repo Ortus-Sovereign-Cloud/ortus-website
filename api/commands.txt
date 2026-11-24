@@ -1,6 +1,7 @@
 backup
 check-backup
 export-point
+migrate
 reference
 restore
 rotate-keys

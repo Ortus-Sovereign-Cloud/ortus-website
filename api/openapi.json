@@ -9137,6 +9137,42 @@
         ]
       }
     },
+    "/api/v1/metrics": {
+      "get": {
+        "operationId": "metrics",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "summary": "Numbers for monitoring, in Prometheus text format: jobs by kind and state, the oldest due job's wait, sessions, phones, the newest restore point's age. Only with ORTUS_METRICS_TOKEN as a bearer token.",
+        "tags": [
+          "operations"
+        ]
+      }
+    },
     "/api/v1/notifications": {
       "get": {
         "description": "For anyone signed in.",
@@ -10265,6 +10301,90 @@
           }
         },
         "summary": "Finish signing in with the one-time code and the ticket from the password step.",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
+    "/api/v1/session/confirm": {
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "confirmItIsYou",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Confirm it is you for the next ten minutes: {passkey: {id, clientDataJSON, authenticatorData, signature}} or {password, code}. Needed before a phone link, new recovery codes, removing the authenticator, a new passkey or signing.",
+        "tags": [
+          "accounts"
+        ]
+      }
+    },
+    "/api/v1/session/confirm/options": {
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "startConfirm",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Options for navigator.credentials.get to confirm it is you (step-up) with one of your passkeys.",
         "tags": [
           "accounts"
         ]
