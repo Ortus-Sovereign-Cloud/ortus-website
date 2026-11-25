@@ -22,7 +22,7 @@ table{border-collapse:collapse;width:100%;font-size:15px;display:block;overflow-
 """
 
 NAV = [("index.html", "Ortus"), ("install.html", "One machine"), ("kubernetes.html", "Kubernetes"), ("backups.html", "Backups"),
-       ("upgrades.html", "Upgrades"), ("sizing.html", "Sizing"), ("integrations.html", "Integrations"), ("phones.html", "Phones"), ("releases.html", "Releases"), ("api/index.html", "API")]
+       ("upgrades.html", "Upgrades"), ("sizing.html", "Sizing"), ("integrations.html", "Integrations"), ("phones.html", "Phones"), ("accessibility.html", "Accessibility"), ("releases.html", "Releases"), ("api/index.html", "API")]
 
 
 def page(title, body, depth=0):

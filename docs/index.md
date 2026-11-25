@@ -10,4 +10,5 @@ Ortus is a workspace an organisation runs itself: mail, calendar and contacts, f
 - [Calls](calls.html): the media server, and calls on networks that allow only web ports.
 - [Integrations](integrations.html): webhooks, the directory, sign-in with outside providers.
 - [Phones](phones.html): the iOS and Android apps, and the phone as a key.
+- [Accessibility](accessibility.html): WCAG 2.2 AA, how it is checked, what is still open.
 - [API reference](api/index.html): every operation of the core and its apps.
