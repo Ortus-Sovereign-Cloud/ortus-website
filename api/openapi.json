@@ -3255,6 +3255,46 @@
       }
     },
     "/api/v1/chat/devices/:device": {
+      "delete": {
+        "description": "For anyone signed in.",
+        "operationId": "chatDeviceRemove",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "One of my devices goes, with its keys and the messages waiting for it: {device, removed}.",
+        "tags": [
+          "chat"
+        ]
+      },
       "put": {
         "description": "For anyone signed in.",
         "operationId": "chatDevice",
