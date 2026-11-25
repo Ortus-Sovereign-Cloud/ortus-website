@@ -18,11 +18,11 @@ axe found no failures on any screen. The keyboard, spacing and phone reviews fou
 - The account and language menus, and mail's snooze menu, did not take focus or move with the arrow keys, and Escape did not return to their button.
 - A new document left focus nowhere; now its name is selected, ready to type over.
 - At 320 px the phone bar could not hold eight places and scrolled sideways.
+- A task's order in its column could only be changed by dragging; its dialog now moves it up and down (WCAG 2.5.7).
 - On the phones, section titles were not headings, a task's tick was not announced as a checkbox (Android) or a toggle (iOS), and a list that failed to load or the offline banner was not announced when it appeared.
 
 ## Known limits
 
-- **Tasks board.** A task's column can be changed in its dialog without dragging. Its order within a column can still only be changed by dragging (WCAG 2.5.7).
 - **Screen readers in use.** The checks above are tools and code review. A full pass with NVDA, JAWS, VoiceOver and TalkBack by people who use them every day has not been done yet.
 - **What people write.** Documents, messages and files are as accessible as their authors make them. Docs keeps headings, lists and tables as real structure, and exports them that way to Word.
 
