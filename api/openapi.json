@@ -3254,6 +3254,378 @@
         ]
       }
     },
+    "/api/v1/chat/account-data/:type": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "chatAccountData",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "My account data of a type (secret storage, the escrow copy).",
+        "tags": [
+          "chat"
+        ]
+      },
+      "put": {
+        "description": "For anyone signed in.",
+        "operationId": "chatAccountDataSet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Sets my account data of a type: a JSON object of at most 64 KB.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/admin/escrow": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "chatEscrowCopy",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "An administrator takes a person's escrow copy (?email=): their recovery key sealed to the organisation's escrow key; recorded.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/backup/keys": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "chatBackupKeys",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "The room keys in a backup of mine (?version=).",
+        "tags": [
+          "chat"
+        ]
+      },
+      "put": {
+        "description": "For anyone signed in.",
+        "operationId": "chatBackupKeysSet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Room keys into my current backup (?version=): {rooms: {room: {sessions: {id: keyData}}}}; a key is replaced only by a better copy.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/backup/version": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "chatBackup",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "My current room-key backup, with how many keys it holds.",
+        "tags": [
+          "chat"
+        ]
+      },
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "chatBackupNew",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A new room-key backup: {algorithm, authData}.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/backup/version/:version": {
+      "delete": {
+        "description": "For anyone signed in.",
+        "operationId": "chatBackupDelete",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Deletes a backup and its keys.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/cross-signing": {
+      "put": {
+        "description": "For anyone signed in.",
+        "operationId": "chatCrossSigning",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "My cross-signing keys: {master, selfSigning, userSigning}; a new master key needs a recent sign-in.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
     "/api/v1/chat/devices/:device": {
       "delete": {
         "description": "For anyone signed in.",
@@ -3546,6 +3918,48 @@
         ]
       }
     },
+    "/api/v1/chat/keys": {
+      "get": {
+        "description": "For anyone signed in.",
+        "operationId": "chatKeysOf",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Someone's devices' keys and master key, for verifying them (?user=): oneself, or someone I share a room with.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
     "/api/v1/chat/messages/:message": {
       "delete": {
         "description": "For anyone signed in.",
@@ -3746,7 +4160,7 @@
             "session": []
           }
         ],
-        "summary": "Whether end-to-end rooms may be made.",
+        "summary": "Whether end-to-end rooms may be made, and the organisation's escrow key.",
         "tags": [
           "chat"
         ]
@@ -3786,7 +4200,7 @@
             "session": []
           }
         ],
-        "summary": "An administrator allows end-to-end rooms or not: {encryptedRooms}.",
+        "summary": "An administrator allows end-to-end rooms or not, and sets the organisation's escrow key: {encryptedRooms, escrowKey}.",
         "tags": [
           "chat"
         ]
@@ -4535,6 +4949,90 @@
           }
         ],
         "summary": "The person is typing in a room (for five seconds).",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/signatures": {
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "chatSignatures",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "Signatures I made, checked before they are kept: {user: {keyId: signedObject}}.",
+        "tags": [
+          "chat"
+        ]
+      }
+    },
+    "/api/v1/chat/verification": {
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "chatVerification",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A verification message to my own devices or to someone I share a room with: {user, device (or *), fromDevice, type, content}.",
         "tags": [
           "chat"
         ]
@@ -9093,6 +9591,48 @@
         ]
       }
     },
+    "/api/v1/me/web-ticket": {
+      "post": {
+        "description": "For anyone signed in.",
+        "operationId": "makeWebTicket",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "security": [
+          {
+            "session": []
+          }
+        ],
+        "summary": "A ticket that signs the web in as you, once, within a minute: {next} (a path); answers {url} to open.",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
     "/api/v1/me/welcome": {
       "get": {
         "description": "For anyone signed in.",
@@ -10687,6 +11227,78 @@
         "summary": "End this session and remove its cookie.",
         "tags": [
           "accounts"
+        ]
+      }
+    },
+    "/api/v1/session/web-ticket": {
+      "post": {
+        "operationId": "useWebTicket",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "summary": "Trades a web ticket for a web session, once: {ticket}.",
+        "tags": [
+          "sessions"
+        ]
+      }
+    },
+    "/api/v1/session/web-ticket/whose": {
+      "post": {
+        "operationId": "webTicketWhose",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Any error, in the common error format."
+          }
+        },
+        "summary": "Whose a web ticket is, without using it: {ticket}.",
+        "tags": [
+          "sessions"
         ]
       }
     },
