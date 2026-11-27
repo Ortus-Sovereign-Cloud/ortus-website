@@ -4160,7 +4160,7 @@
             "session": []
           }
         ],
-        "summary": "Whether end-to-end rooms may be made, and the organisation's escrow key.",
+        "summary": "Whether end-to-end rooms may be made, and the organisation's escrow: the object an administrator signed, with their master key (signerMaster); escrowUnsigned for a key nobody signed.",
         "tags": [
           "chat"
         ]
@@ -4200,7 +4200,7 @@
             "session": []
           }
         ],
-        "summary": "An administrator allows end-to-end rooms or not, and sets the organisation's escrow key: {encryptedRooms, escrowKey}.",
+        "summary": "An administrator allows end-to-end rooms or not, and sets the organisation's escrow key, signed by their master key: {encryptedRooms, escrow: {user_id, usage, public_key, signatures} or null}.",
         "tags": [
           "chat"
         ]
