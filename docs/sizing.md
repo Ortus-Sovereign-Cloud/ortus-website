@@ -8,20 +8,20 @@ A thousand people are signed in at once, each with twenty messages in their mail
 
 The installation is the cluster shape: the program with PostgreSQL 17 and S3-compatible storage, all on one 4-core, 16 GB GitHub runner, together with the load maker. The numbers are therefore a floor: on a machine of its own Ortus has more room.
 
-## A thousand people (27 November 2026)
+## A thousand people (28 November 2026)
 
-- 49,976 operations in 5 minutes (167 a second), no errors.
-- The program used under half a core on average and at most 122 MB of memory.
-- 95 % of the working day's operations answered in under 50 ms. End-to-end trust: a 50-person room's devices with their signatures in 17 ms, a backup upload in 26, a full restore of the backup in 12.
+- 49,974 operations in 5 minutes (167 a second), no errors.
+- The program used under half a core on average and at most 121 MB of memory.
+- Every kind of operation answered in under 50 ms, 95 times in 100: the slowest, a file upload, in 41 ms, the inbox in 34. End-to-end trust: a 50-person room's devices with their signatures in 19 ms, a backup upload in 13, a full restore of the backup in 14.
 
 | Without pauses | Operations a second | Reads (p95) | Writes (p95) |
 |---:|---:|---:|---:|
-| 25 at once | 499 | 213 ms | 275 ms |
-| 50 at once | 433 | 549 ms | 670 ms |
-| 100 at once | 431 | 1.1 s | 849 ms |
-| 200 at once | 441 | 2.2 s | 1.2 s |
+| 25 at once | 457 | 177 ms | 164 ms |
+| 50 at once | 431 | 379 ms | 317 ms |
+| 100 at once | 419 | 710 ms | 574 ms |
+| 200 at once | 440 | 1.4 s | 1.1 s |
 
-Beyond 25 at once without pauses the shared runner's four cores are full (PostgreSQL, the S3 store and the load maker share them) and requests wait for one of the 16 database connections.
+Beyond 25 at once without pauses the shared runner's four cores are full: PostgreSQL, the S3 store and the load maker share them, and requests queue. More database connections do not help there (64 instead of 16 was a fifth slower); fewer statements a request do, and each release works on that.
 
 ## What to start with
 
