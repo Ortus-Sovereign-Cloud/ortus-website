@@ -23,6 +23,19 @@ The installation is the cluster shape: the program with PostgreSQL 17 and S3-com
 
 Beyond 25 at once without pauses the shared runner's four cores are full: PostgreSQL, the S3 store and the load maker share them, and requests queue. More database connections do not help there (64 instead of 16 was a fifth slower); fewer statements a request do, and each release works on that.
 
+## Bigger mailboxes (28 November 2026)
+
+The same mix with 100 people and 500 messages each in their mailbox, so that opening the inbox has real mail to list:
+
+| Without pauses | Operations a second | Reads (p95) | Writes (p95) |
+|---:|---:|---:|---:|
+| 25 at once | 445 | 250 ms | 142 ms |
+| 50 at once | 440 | 419 ms | 273 ms |
+| 100 at once | 401 | 855 ms | 539 ms |
+| 200 at once | 423 | 828 ms | 537 ms |
+
+Opening the inbox took 35 ms (p95). An inbox page reads neither the whole mailbox nor each message's file: before that change the same run managed 233 operations a second, and each person's mail grows, so the size of the mailboxes matters as much as the number of people.
+
 ## What to start with
 
 - **Up to about 1,000 people**: one machine with 4 cores and 8 GB of memory runs Ortus, PostgreSQL and the files comfortably; the one-machine install (SQLite) suits a few hundred.
